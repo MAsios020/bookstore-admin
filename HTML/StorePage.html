@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BookStore - Your Online Book Shop</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../CSS/store-styles.css">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="header-main">
+            <div class="container">
+                <div class="logo">
+                    <a href="StorePage.html">
+                        <i class="fas fa-book"></i>
+                        <span>BookStore</span>
+                    </a>
+                </div>
+                
+                <div class="search-bar">
+                    <form action="#" class="search-form">
+                        <select name="category">
+                            <option value="">All Categories</option>
+                            <option value="fiction">Fiction</option>
+                            <option value="non-fiction">Non-Fiction</option>
+                            <option value="children">Children's Books</option>
+                        </select>
+                        <input type="text" placeholder="Search for books...">
+                        <button type="submit"><i class="fas fa-search"></i></button>
+                    </form>
+                </div>
+                
+                <div class="user-actions">
+                    <div class="cart-dropdown">
+                        <button class="btn btn-icon" id="cartButton">
+                            <i class="fas fa-shopping-cart"></i>
+                            <span class="cart-count">0</span>
+                        </button>
+                        <div class="cart-dropdown-content" id="cartDropdown">
+                            <div class="cart-items" id="cartItems">
+                                <!-- Cart items will be loaded here -->
+                            </div>
+                            <div class="cart-summary">
+                                <div class="cart-total">
+                                    <span>Total:</span>
+                                    <span id="cartTotal">$0.00</span>
+                                </div>
+                                <button class="btn btn-primary btn-block" onclick="proceedToCheckout()">
+                                    Proceed to Checkout
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <a href="LoginPage.html" class="btn btn-outline">Sign In</a>
+                    <a href="RegistrationPage.html" class="btn btn-primary">Register</a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Books Section -->
+    <section class="books-section">
+        <div class="container">
+            <!-- Filters -->
+            <div class="filter-wrapper">
+                <div class="filter-group">
+                    <label>Sort By</label>
+                    <select id="sortSelect" onchange="sortBooks()">
+                        <option value="newest">Newest Arrivals</option>
+                        <option value="price-low">Price: Low to High</option>
+                        <option value="price-high">Price: High to Low</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label>Category</label>
+                    <select id="categorySelect" onchange="filterBooks()">
+                        <option value="">All Categories</option>
+                        <!-- Categories will be loaded dynamically -->
+                    </select>
+                </div>
+            </div>
+
+            <!-- Books Grid -->
+            <div class="books-grid" id="booksGrid">
+                <!-- Books will be loaded here -->
+            </div>
+        </div>
+    </section>
+
+    <script src="../JavaScript/store.js"></script>
+</body>
+</html> 

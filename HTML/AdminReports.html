@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reports - BookStore Admin</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../CSS/admin-styles.css">
+    <!-- Add Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <div class="dashboard-container">
+        <!-- Same sidebar structure -->
+        <aside class="sidebar">
+            <!-- Update active class to "Reports" -->
+        </aside>
+
+        <main class="main-content">
+            <div class="page-header">
+                <div>
+                    <h1 class="page-title">Reports & Analytics</h1>
+                    <p class="text-sm text-secondary">View detailed reports and statistics</p>
+                </div>
+                <div class="date-filter">
+                    <select class="form-input" onchange="updateReports(this.value)">
+                        <option value="7">Last 7 Days</option>
+                        <option value="30">Last 30 Days</option>
+                        <option value="90">Last 90 Days</option>
+                        <option value="365">Last Year</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Reports Grid -->
+            <div class="reports-grid">
+                <!-- Sales Overview -->
+                <div class="report-card full-width">
+                    <h3>Sales Overview</h3>
+                    <canvas id="salesChart"></canvas>
+                </div>
+
+                <!-- Popular Categories -->
+                <div class="report-card">
+                    <h3>Popular Categories</h3>
+                    <canvas id="categoriesChart"></canvas>
+                </div>
+
+                <!-- Stock Status -->
+                <div class="report-card">
+                    <h3>Stock Status</h3>
+                    <canvas id="stockChart"></canvas>
+                </div>
+
+                <!-- Top Selling Books -->
+                <div class="report-card">
+                    <h3>Top Selling Books</h3>
+                    <div class="top-books-list">
+                        <!-- Will be populated by JavaScript -->
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        // Load sidebar
+        fetch('components/AdminSidebar.html')
+            .then(response => response.text())
+            .then(html => {
+                document.querySelector('.sidebar').outerHTML = html;
+            });
+
+        window.onload = function() {
+            checkAdminStatus();
+            initializeCharts();
+        };
+
+        // Add reporting functions
+        function initializeCharts() {
+            // Sales Chart
+            const salesCtx = document.getElementById('salesChart').getContext('2d');
+            new Chart(salesCtx, {
+                type: 'line',
+                data: {
+                    labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
+                    datasets: [{
+                        label: 'Sales',
+                        data: [12, 19, 3, 5, 2, 3],
+                        borderColor: 'rgb(75, 192, 192)',
+                        tension: 0.1
+                    }]
+                }
+            });
+
+            // Add more charts initialization
+        }
+
+        // Add more reporting functions
+    </script>
+</body>
+</html> 

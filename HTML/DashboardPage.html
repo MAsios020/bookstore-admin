@@ -1,0 +1,735 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap');
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            transition: all 0.3s ease;
+        }
+
+        .dashboard-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            background: var(--bg-secondary);
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px var(--shadow);
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .welcome-message {
+            color: var(--text-primary);
+        }
+
+        .user-info {
+            background: var(--bg-secondary);
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px var(--shadow);
+            margin-bottom: 20px;
+        }
+
+        .info-item {
+            margin: 10px 0;
+            padding: 10px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .info-label {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        .info-value {
+            color: var(--text-primary);
+            font-weight: 500;
+            margin-top: 5px;
+        }
+
+        .logout-button {
+            background: #e74c3c;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+
+        .logout-button:hover {
+            background: #c0392b;
+        }
+
+        .edit-button {
+            background: #3498db;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 3px;
+            cursor: pointer;
+            font-size: 0.8rem;
+            margin-left: 10px;
+        }
+
+        .edit-button:hover {
+            background: #2980b9;
+        }
+
+        .save-button {
+            background: #27ae60;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 3px;
+            cursor: pointer;
+            font-size: 0.8rem;
+            margin-left: 10px;
+        }
+
+        .save-button:hover {
+            background: #219a52;
+        }
+
+        .cancel-button {
+            background: #e74c3c;
+            margin-left: 5px;
+        }
+
+        .edit-input {
+            width: 100%;
+            padding: 8px;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            font-size: 0.9rem;
+        }
+
+        .buttons-container {
+            display: flex;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .error-message {
+            color: #e74c3c;
+            font-size: 0.8rem;
+            margin-top: 5px;
+            display: none;
+        }
+
+        .profile-image-container {
+            text-align: center;
+            margin-bottom: 20px;
+            padding: 20px;
+            background: var(--bg-secondary);
+            border-radius: 10px;
+            box-shadow: 0 2px 10px var(--shadow);
+        }
+
+        .profile-image {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-bottom: 10px;
+            border: 3px solid #3498db;
+        }
+
+        .image-upload-button {
+            background: #3498db;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: background 0.3s ease;
+        }
+
+        .image-upload-button:hover {
+            background: #2980b9;
+        }
+
+        #imageUploadInput {
+            display: none;
+        }
+
+        .theme-settings {
+            background: var(--bg-secondary);
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px var(--shadow);
+            margin-bottom: 20px;
+        }
+
+        .theme-section {
+            margin-bottom: 20px;
+        }
+
+        .theme-section h3 {
+            color: var(--text-primary);
+            margin-bottom: 10px;
+        }
+
+        .theme-options, .color-options {
+            display: flex;
+            gap: 10px;
+        }
+
+        .theme-button {
+            padding: 8px 16px;
+            border: 1px solid var(--border);
+            border-radius: 5px;
+            background: var(--bg-secondary);
+            color: var(--text-primary);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .theme-button:hover {
+            background: var(--theme-color);
+            color: white;
+        }
+
+        .theme-button.active {
+            background: var(--theme-color);
+            color: white;
+        }
+
+        .color-button {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            border: 2px solid var(--border);
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+
+        .color-button:hover {
+            transform: scale(1.1);
+        }
+
+        .color-button[data-color="blue"] { background: var(--theme-blue); }
+        .color-button[data-color="green"] { background: var(--theme-green); }
+        .color-button[data-color="purple"] { background: var(--theme-purple); }
+        .color-button[data-color="orange"] { background: var(--theme-orange); }
+        .color-button[data-color="red"] { background: var(--theme-red); }
+
+        /* Add these theme variables at the top of your CSS */
+        :root {
+            /* Light mode */
+            --bg-primary-light: #f4f6f9;
+            --bg-secondary-light: #ffffff;
+            --text-primary-light: #333333;
+            --text-secondary-light: #666666;
+            --border-light: #eeeeee;
+            --shadow-light: rgba(0, 0, 0, 0.1);
+
+            /* Dark mode */
+            --bg-primary-dark: #1a1a1a;
+            --bg-secondary-dark: #2d2d2d;
+            --text-primary-dark: #ffffff;
+            --text-secondary-dark: #cccccc;
+            --border-dark: #404040;
+            --shadow-dark: rgba(0, 0, 0, 0.3);
+
+            /* Theme colors */
+            --theme-blue: #3498db;
+            --theme-green: #2ecc71;
+            --theme-purple: #9b59b6;
+            --theme-orange: #e67e22;
+            --theme-red: #e74c3c;
+        }
+
+        /* Apply theme variables to elements */
+        .header, .user-info, .profile-image-container, .theme-settings {
+            background: var(--bg-secondary);
+            color: var(--text-primary);
+            box-shadow: 0 2px 10px var(--shadow);
+            border: 1px solid var(--border);
+            transition: all 0.3s ease;
+        }
+
+        /* Theme mode classes */
+        [data-theme="light"] {
+            --bg-primary: var(--bg-primary-light);
+            --bg-secondary: var(--bg-secondary-light);
+            --text-primary: var(--text-primary-light);
+            --text-secondary: var(--text-secondary-light);
+            --border: var(--border-light);
+            --shadow: var(--shadow-light);
+        }
+
+        [data-theme="dark"] {
+            --bg-primary: var(--bg-primary-dark);
+            --bg-secondary: var(--bg-secondary-dark);
+            --text-primary: var(--text-primary-dark);
+            --text-secondary: var(--text-secondary-dark);
+            --border: var(--border-dark);
+            --shadow: var(--shadow-dark);
+        }
+    </style>
+</head>
+<body>
+    <div class="dashboard-container">
+        <div class="header">
+            <h1 class="welcome-message">Welcome, <span id="userEmail"></span></h1>
+            <button class="logout-button" onclick="logout()">Logout</button>
+        </div>
+        
+        <div class="theme-settings">
+            <div class="theme-section">
+                <h3>Theme Mode</h3>
+                <div class="theme-options">
+                    <button class="theme-button" onclick="setThemeMode('light')" data-mode="light">
+                        <i class="fas fa-sun"></i> Light
+                    </button>
+                    <button class="theme-button" onclick="setThemeMode('dark')" data-mode="dark">
+                        <i class="fas fa-moon"></i> Dark
+                    </button>
+                </div>
+            </div>
+            <div class="theme-section">
+                <h3>Theme Color</h3>
+                <div class="color-options">
+                    <button class="color-button" onclick="setThemeColor('blue')" data-color="blue"></button>
+                    <button class="color-button" onclick="setThemeColor('green')" data-color="green"></button>
+                    <button class="color-button" onclick="setThemeColor('purple')" data-color="purple"></button>
+                    <button class="color-button" onclick="setThemeColor('orange')" data-color="orange"></button>
+                    <button class="color-button" onclick="setThemeColor('red')" data-color="red"></button>
+                </div>
+            </div>
+        </div>
+        
+        <div class="profile-image-container">
+            <img id="profileImage" src="default-profile.png" alt="Profile" class="profile-image">
+            <div>
+                <input type="file" id="imageUploadInput" accept="image/*">
+                <button class="image-upload-button" onclick="document.getElementById('imageUploadInput').click()">
+                    Change Profile Picture
+                </button>
+            </div>
+            <div class="error-message" id="imageError"></div>
+        </div>
+        
+        <div class="user-info">
+            <h2>User Information</h2>
+            <div class="info-item">
+                <div class="info-label">Full Name</div>
+                <div class="info-value" id="fullnameDisplay"></div>
+                <button class="edit-button" onclick="editField('fullname')">Edit</button>
+                <div class="error-message" id="fullnameError"></div>
+            </div>
+            <div class="info-item">
+                <div class="info-label">Username</div>
+                <div class="info-value" id="usernameDisplay"></div>
+                <button class="edit-button" onclick="editField('username')">Edit</button>
+                <div class="error-message" id="usernameError"></div>
+            </div>
+            <div class="info-item">
+                <div class="info-label">Email</div>
+                <div class="info-value" id="emailDisplay"></div>
+                <button class="edit-button" onclick="editField('email')">Edit</button>
+                <div class="error-message" id="emailError"></div>
+            </div>
+            <div class="info-item">
+                <div class="info-label">Phone Number</div>
+                <div class="info-value" id="phoneDisplay"></div>
+                <button class="edit-button" onclick="editField('phone')">Edit</button>
+                <div class="error-message" id="phoneError"></div>
+            </div>
+            <div class="info-item">
+                <div class="info-label">Address</div>
+                <div class="info-value" id="addressDisplay"></div>
+                <button class="edit-button" onclick="editField('address')">Edit</button>
+                <div class="error-message" id="addressError"></div>
+            </div>
+            <div class="info-item">
+                <div class="info-label">Account Created</div>
+                <div class="info-value" id="createdAtDisplay"></div>
+            </div>
+            <div class="info-item">
+                <div class="info-label">Created Time</div>
+                <div class="info-value" id="createdTimeDisplay"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Check if user is logged in
+        window.onload = function() {
+            const userData = JSON.parse(localStorage.getItem('userData'));
+            if (!userData) {
+                window.location.href = 'LoginPage.html';
+                return;
+            }
+
+            // Display user information
+            document.getElementById('userEmail').textContent = userData.email;
+            document.getElementById('fullnameDisplay').textContent = userData.fullname;
+            document.getElementById('usernameDisplay').textContent = userData.username;
+            document.getElementById('emailDisplay').textContent = userData.email;
+            document.getElementById('phoneDisplay').textContent = userData.phonenumber || 'Not provided';
+            document.getElementById('addressDisplay').textContent = userData.address || 'Not provided';
+            
+            // Set profile image with timestamp to prevent caching
+            if (userData.profile_image) {
+                const profileImage = document.getElementById('profileImage');
+                profileImage.src = userData.profile_image + '?t=' + new Date().getTime();
+            }
+
+            // Display creation date/time if available
+            if (userData.created_at) {
+                const createdDate = new Date(userData.created_at);
+                document.getElementById('createdAtDisplay').textContent = createdDate.toLocaleDateString();
+                document.getElementById('createdTimeDisplay').textContent = createdDate.toLocaleTimeString();
+            }
+            
+            // Fetch additional user data from server
+            fetchUserData(userData.id);
+        };
+
+        async function fetchUserData(userId) {
+            try {
+                const response = await fetch(`http://localhost:3000/user/${userId}`, {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                });
+
+                if (!response.ok) {
+                    throw new Error('Failed to fetch user data');
+                }
+
+                const userData = await response.json();
+                
+                // Update profile image if it exists
+                if (userData.profile_image) {
+                    const profileImage = document.getElementById('profileImage');
+                    profileImage.src = userData.profile_image + '?t=' + new Date().getTime();
+                }
+                
+                updateDashboard(userData);
+            } catch (error) {
+                console.error('Error fetching user data:', error);
+            }
+        }
+
+        function updateDashboard(userData) {
+            if (userData.created_at) {
+                const createdDate = new Date(userData.created_at);
+                
+                // Format date
+                document.getElementById('createdAtDisplay').textContent = 
+                    createdDate.toLocaleDateString();
+                
+                // Format time
+                document.getElementById('createdTimeDisplay').textContent = 
+                    createdDate.toLocaleTimeString();
+            }
+        }
+
+        function editField(fieldName) {
+            const displayElement = document.getElementById(`${fieldName}Display`);
+            const currentValue = displayElement.textContent;
+            
+            // Create input element
+            const input = document.createElement('input');
+            input.type = 'text';
+            input.value = currentValue;
+            input.className = 'edit-input';
+            
+            // Create buttons container
+            const buttonsContainer = document.createElement('div');
+            buttonsContainer.className = 'buttons-container';
+            
+            // Create save button
+            const saveButton = document.createElement('button');
+            saveButton.textContent = 'Save';
+            saveButton.className = 'save-button';
+            saveButton.onclick = () => saveField(fieldName, input.value);
+            
+            // Create cancel button
+            const cancelButton = document.createElement('button');
+            cancelButton.textContent = 'Cancel';
+            cancelButton.className = 'save-button cancel-button';
+            cancelButton.onclick = () => cancelEdit(fieldName, currentValue);
+            
+            // Replace display with input and buttons
+            displayElement.innerHTML = '';
+            displayElement.appendChild(input);
+            buttonsContainer.appendChild(saveButton);
+            buttonsContainer.appendChild(cancelButton);
+            displayElement.appendChild(buttonsContainer);
+            
+            // Hide edit button
+            const editButton = displayElement.nextElementSibling;
+            editButton.style.display = 'none';
+        }
+
+        async function saveField(fieldName, newValue) {
+            try {
+                const userData = JSON.parse(localStorage.getItem('userData'));
+                const userId = userData.id;
+                
+                // Validate input
+                if (!newValue.trim()) {
+                    throw new Error('This field cannot be empty');
+                }
+
+                // Prepare updated user data
+                const updatedData = {
+                    fullname: userData.fullname,
+                    username: userData.username,
+                    email: userData.email,
+                    phonenumber: userData.phonenumber || '',
+                    address: userData.address || ''
+                };
+
+                // Update the specific field
+                switch(fieldName) {
+                    case 'fullname': updatedData.fullname = newValue; break;
+                    case 'username': updatedData.username = newValue; break;
+                    case 'email': updatedData.email = newValue; break;
+                    case 'phone': updatedData.phonenumber = newValue; break;
+                    case 'address': updatedData.address = newValue; break;
+                }
+
+                console.log('Sending update request:', updatedData);
+
+                const response = await fetch(`http://localhost:3000/user/${userId}`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json'
+                    },
+                    body: JSON.stringify(updatedData)
+                });
+
+                let responseData;
+                try {
+                    responseData = await response.json();
+                    console.log('Server response:', responseData);
+                } catch (error) {
+                    console.error('Error parsing response:', error);
+                    throw new Error('Invalid server response');
+                }
+
+                if (!response.ok || !responseData.success) {
+                    throw new Error(responseData.message || 'Failed to update user data');
+                }
+
+                // Update localStorage with the response data
+                if (responseData.user) {
+                    localStorage.setItem('userData', JSON.stringify(responseData.user));
+                    
+                    // Update all displayed fields with new data
+                    document.getElementById('userEmail').textContent = responseData.user.email;
+                    document.getElementById('fullnameDisplay').textContent = responseData.user.fullname;
+                    document.getElementById('usernameDisplay').textContent = responseData.user.username;
+                    document.getElementById('emailDisplay').textContent = responseData.user.email;
+                    document.getElementById('phoneDisplay').textContent = responseData.user.phonenumber || 'Not provided';
+                    document.getElementById('addressDisplay').textContent = responseData.user.address || 'Not provided';
+                }
+
+                // Show edit button
+                const displayElement = document.getElementById(`${fieldName}Display`);
+                const editButton = displayElement.nextElementSibling;
+                editButton.style.display = 'inline-block';
+
+                // Show success message
+                const errorElement = document.getElementById(`${fieldName}Error`);
+                errorElement.textContent = 'Updated successfully!';
+                errorElement.style.color = '#27ae60';
+                errorElement.style.display = 'block';
+                setTimeout(() => {
+                    errorElement.style.display = 'none';
+                }, 3000);
+
+            } catch (error) {
+                console.error('Error updating user data:', error);
+                const errorElement = document.getElementById(`${fieldName}Error`);
+                errorElement.textContent = error.message || 'Failed to update. Please try again.';
+                errorElement.style.color = '#e74c3c';
+                errorElement.style.display = 'block';
+            }
+        }
+
+        function cancelEdit(fieldName, originalValue) {
+            const displayElement = document.getElementById(`${fieldName}Display`);
+            displayElement.innerHTML = originalValue;
+            
+            // Show edit button
+            const editButton = displayElement.nextElementSibling;
+            editButton.style.display = 'inline-block';
+            
+            // Hide error message if any
+            document.getElementById(`${fieldName}Error`).style.display = 'none';
+        }
+
+        function logout() {
+            localStorage.removeItem('userData');
+            window.location.href = 'LoginPage.html';
+        }
+
+        document.getElementById('imageUploadInput').addEventListener('change', async function(e) {
+            if (!e.target.files.length) return;
+
+            const file = e.target.files[0];
+            const maxSize = 5 * 1024 * 1024; // 5MB
+
+            if (file.size > maxSize) {
+                document.getElementById('imageError').textContent = 'File size must be less than 5MB';
+                document.getElementById('imageError').style.display = 'block';
+                return;
+            }
+
+            // Validate file type
+            if (!file.type.match(/image\/(jpeg|jpg|png|gif)/)) {
+                document.getElementById('imageError').textContent = 'Only image files (JPG, PNG, GIF) are allowed';
+                document.getElementById('imageError').style.display = 'block';
+                return;
+            }
+
+            const formData = new FormData();
+            formData.append('profile_image', file);
+
+            try {
+                const userData = JSON.parse(localStorage.getItem('userData'));
+                
+                // Show loading state
+                const uploadButton = document.querySelector('.image-upload-button');
+                uploadButton.textContent = 'Uploading...';
+                uploadButton.disabled = true;
+
+                const response = await fetch(`http://localhost:3000/user/${userData.id}/profile-image`, {
+                    method: 'POST',
+                    body: formData
+                });
+
+                const result = await response.json();
+                
+                if (!response.ok || !result.success) {
+                    throw new Error(result.message || 'Failed to upload image');
+                }
+
+                // Update profile image immediately
+                const profileImage = document.getElementById('profileImage');
+                profileImage.src = result.imageUrl + '?t=' + new Date().getTime(); // Add timestamp to prevent caching
+                
+                // Update localStorage
+                userData.profile_image = result.imageUrl;
+                localStorage.setItem('userData', JSON.stringify(userData));
+
+                // Show success message
+                const errorElement = document.getElementById('imageError');
+                errorElement.textContent = 'Profile image updated successfully!';
+                errorElement.style.color = '#27ae60';
+                errorElement.style.display = 'block';
+                setTimeout(() => {
+                    errorElement.style.display = 'none';
+                }, 3000);
+
+            } catch (error) {
+                console.error('Error uploading image:', error);
+                document.getElementById('imageError').textContent = error.message || 'Failed to upload image';
+                document.getElementById('imageError').style.color = '#e74c3c';
+                document.getElementById('imageError').style.display = 'block';
+            } finally {
+                // Reset upload button
+                const uploadButton = document.querySelector('.image-upload-button');
+                uploadButton.textContent = 'Change Profile Picture';
+                uploadButton.disabled = false;
+            }
+        });
+
+        // Theme management functions
+        function setThemeMode(mode) {
+            document.documentElement.setAttribute('data-theme', mode);
+            updateThemeSettings({ mode });
+        }
+
+        function setThemeColor(color) {
+            document.documentElement.setAttribute('data-color', color);
+            updateThemeSettings({ color });
+        }
+
+        async function updateThemeSettings(settings) {
+            const userData = JSON.parse(localStorage.getItem('userData'));
+            const currentSettings = JSON.parse(userData.theme_settings || '{"mode":"light","color":"blue"}');
+            const newSettings = { ...currentSettings, ...settings };
+
+            try {
+                const response = await fetch(`http://localhost:3000/user/${userData.id}/theme`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ theme_settings: newSettings })
+                });
+
+                if (!response.ok) {
+                    throw new Error('Failed to update theme settings');
+                }
+
+                // Update localStorage
+                userData.theme_settings = JSON.stringify(newSettings);
+                localStorage.setItem('userData', JSON.stringify(userData));
+
+                // Update active states
+                updateActiveThemeButtons();
+            } catch (error) {
+                console.error('Error updating theme:', error);
+            }
+        }
+
+        function updateActiveThemeButtons() {
+            const userData = JSON.parse(localStorage.getItem('userData'));
+            const settings = JSON.parse(userData.theme_settings || '{"mode":"light","color":"blue"}');
+
+            // Update mode buttons
+            document.querySelectorAll('.theme-button').forEach(button => {
+                button.classList.toggle('active', button.dataset.mode === settings.mode);
+            });
+
+            // Update color buttons
+            document.querySelectorAll('.color-button').forEach(button => {
+                button.style.borderColor = button.dataset.color === settings.color ? 'white' : 'var(--border)';
+            });
+        }
+
+        // Add to window.onload
+        window.addEventListener('load', function() {
+            const userData = JSON.parse(localStorage.getItem('userData'));
+            if (userData && userData.theme_settings) {
+                const settings = JSON.parse(userData.theme_settings);
+                setThemeMode(settings.mode);
+                setThemeColor(settings.color);
+                updateActiveThemeButtons();
+            }
+        });
+    </script>
+</body>
+</html> 

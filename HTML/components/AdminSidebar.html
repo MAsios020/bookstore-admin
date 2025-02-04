@@ -1,0 +1,132 @@
+<aside class="sidebar">
+    <div class="sidebar-header">
+        <div class="sidebar-logo">
+            <i class="fas fa-book"></i>
+            <span>BookStore Admin</span>
+        </div>
+    </div>
+
+    <nav class="nav-section">
+        <h2 class="nav-title">Main Menu</h2>
+        <ul class="nav-items">
+            <li class="nav-item">
+                <a href="AdminDashboard.html" class="nav-link" id="dashboard-link">
+                    <i class="fas fa-home"></i>
+                    <span>Dashboard</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="AdminBooks.html" class="nav-link" id="books-link">
+                    <i class="fas fa-book"></i>
+                    <span>Books</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="AdminUsers.html" class="nav-link" id="users-link">
+                    <i class="fas fa-users"></i>
+                    <span>Users</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="AdminReports.html" class="nav-link" id="reports-link">
+                    <i class="fas fa-chart-bar"></i>
+                    <span>Reports</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
+
+    <nav class="nav-section">
+        <h2 class="nav-title">Settings</h2>
+        <ul class="nav-items">
+            <li class="nav-item">
+                <a href="#" class="nav-link">
+                    <i class="fas fa-cog"></i>
+                    <span>Settings</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="#" onclick="logout()" class="nav-link">
+                    <i class="fas fa-sign-out-alt"></i>
+                    <span>Logout</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
+</aside>
+
+<script>
+    // Set active link based on current page
+    function setActiveLink() {
+        const currentPage = window.location.pathname.split('/').pop();
+        console.log('Current page:', currentPage); // Log the current page
+        const links = document.querySelectorAll('.nav-link');
+        links.forEach(link => link.classList.remove('active'));
+
+        switch(currentPage) {
+            case 'AdminDashboard.html':
+                console.log('Activating Dashboard link');
+                document.getElementById('dashboard-link').classList.add('active');
+                break;
+            case 'AdminBooks.html':
+                console.log('Activating Books link');
+                document.getElementById('books-link').classList.add('active');
+                break;
+            case 'AdminUsers.html':
+                console.log('Activating Users link');
+                document.getElementById('users-link').classList.add('active');
+                break;
+            case 'AdminReports.html':
+                console.log('Activating Reports link');
+                document.getElementById('reports-link').classList.add('active');
+                break;
+            default:
+                console.log('No matching link found');
+        }
+    }
+
+    // Call setActiveLink when the page loads
+    document.addEventListener('DOMContentLoaded', setActiveLink);
+
+    // JavaScript to control the dashboard sections
+    function showDashboard() {
+        hideAllSections();
+        document.querySelector('.page-title').textContent = 'Dashboard';
+        // Show dashboard-specific content
+    }
+
+    function showBooksSection() {
+        hideAllSections();
+        document.querySelector('.page-title').textContent = 'Books';
+        // Show books-specific content
+    }
+
+    function showOrdersSection() {
+        hideAllSections();
+        document.querySelector('.page-title').textContent = 'Orders';
+        document.getElementById('ordersSection').style.display = 'block';
+    }
+
+    function showUsersSection() {
+        hideAllSections();
+        document.querySelector('.page-title').textContent = 'Users';
+        document.getElementById('usersSection').style.display = 'block';
+    }
+
+    function showReportsSection() {
+        hideAllSections();
+        document.querySelector('.page-title').textContent = 'Reports';
+        document.getElementById('reportsSection').style.display = 'block';
+    }
+
+    function hideAllSections() {
+        document.querySelectorAll('.dashboard-section').forEach(section => {
+            section.style.display = 'none';
+        });
+    }
+
+    // Initialize the dashboard
+    window.onload = function() {
+        showDashboard(); // Show the dashboard by default
+    };
+</script> 

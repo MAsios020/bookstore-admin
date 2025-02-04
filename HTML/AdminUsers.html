@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Users Management - BookStore Admin</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../CSS/admin-styles.css">
+</head>
+<body>
+    <div class="dashboard-container">
+        <!-- Same sidebar structure -->
+        <aside class="sidebar">
+            <!-- Update active class to "Users" -->
+        </aside>
+
+        <main class="main-content">
+            <div class="page-header">
+                <div>
+                    <h1 class="page-title">Users Management</h1>
+                    <p class="text-sm text-secondary">Manage user accounts and permissions</p>
+                </div>
+            </div>
+
+            <!-- Users Stats -->
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3 id="totalUsers">0</h3>
+                        <p>Total Users</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-user-shield"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3 id="adminUsers">0</h3>
+                        <p>Administrators</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-user-clock"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3 id="newUsers">0</h3>
+                        <p>New Users (This Month)</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Users Table -->
+            <div class="table-container">
+                <div class="table-header">
+                    <h2>Users List</h2>
+                    <div class="table-actions">
+                        <input type="text" 
+                               class="form-input" 
+                               placeholder="Search users..."
+                               onkeyup="searchUsers()">
+                        <select class="form-input" onchange="filterUsers(this.value)">
+                            <option value="">All Users</option>
+                            <option value="admin">Administrators</option>
+                            <option value="user">Regular Users</option>
+                        </select>
+                    </div>
+                </div>
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>User</th>
+                            <th>Email</th>
+                            <th>Role</th>
+                            <th>Status</th>
+                            <th>Joined Date</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="usersTableBody">
+                        <!-- Users will be loaded here -->
+                    </tbody>
+                </table>
+            </div>
+        </main>
+    </div>
+
+    <!-- User Details Modal -->
+    <div id="userModal" class="modal">
+        <!-- Add user details modal content -->
+    </div>
+
+    <script>
+        // Load sidebar
+        fetch('components/AdminSidebar.html')
+            .then(response => response.text())
+            .then(html => {
+                document.querySelector('.sidebar').outerHTML = html;
+            });
+
+        window.onload = function() {
+            checkAdminStatus();
+            loadUsers();
+        };
+
+        // Add user management functions
+        async function loadUsers() {
+            try {
+                const response = await fetch('http://localhost:3000/users');
+                const data = await response.json();
+                displayUsers(data);
+                updateUserStats(data);
+            } catch (error) {
+                console.error('Error loading users:', error);
+            }
+        }
+
+        function displayUsers(users) {
+            const tbody = document.getElementById('usersTableBody');
+            tbody.innerHTML = users.map(user => `
+                <tr>
+                    <td>
+                        <div class="user-info">
+                            <img src="${user.profile_image}" alt="${user.fullname}" class="user-avatar">
+                            <div>
+                                <div class="user-name">${user.fullname}</div>
+                                <div class="user-username">@${user.username}</div>
+                            </div>
+                        </div>
+                    </td>
+                    <td>${user.email}</td>
+                    <td>
+                        <span class="badge ${user.is_admin ? 'badge-primary' : 'badge-secondary'}">
+                            ${user.is_admin ? 'Admin' : 'User'}
+                        </span>
+                    </td>
+                    <td>
+                        <span class="badge badge-success">Active</span>
+                    </td>
+                    <td>${new Date(user.created_at).toLocaleDateString()}</td>
+                    <td>
+                        <button class="btn btn-icon" onclick="viewUser(${user.id})">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                        <button class="btn btn-icon" onclick="editUser(${user.id})">
+                            <i class="fas fa-edit"></i>
+                        </button>
+                        ${!user.is_admin ? `
+                            <button class="btn btn-icon" onclick="deleteUser(${user.id})">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        ` : ''}
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        // Add more user management functions
+    </script>
+</body>
+</html> 
