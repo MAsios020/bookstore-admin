@@ -70,9 +70,9 @@ async function loadDashboardData() {
     try {
         // Load initial data
         const [booksResponse, ordersResponse, usersResponse] = await Promise.all([
-            fetch('http://localhost:3000/books'),
-            fetch('http://localhost:3000/orders'),
-            fetch('http://localhost:3000/users')
+            fetch(`${config.apiUrl}/books`),
+            fetch(`${config.apiUrl}/orders`),
+            fetch(`${config.apiUrl}/users`)
         ]);
 
         const booksData = await booksResponse.json();
@@ -122,7 +122,7 @@ function loadSectionData(section) {
 // Books Management
 async function loadBooks() {
     try {
-        const response = await fetch('http://localhost:3000/books');
+        const response = await fetch(`${config.apiUrl}/books`);
         const data = await response.json();
         
         if (data.success) {
@@ -187,8 +187,8 @@ async function handleBookSubmit(event) {
     
     try {
         const url = bookId 
-            ? `http://localhost:3000/books/${bookId}`
-            : 'http://localhost:3000/books';
+            ? `${config.apiUrl}/books/${bookId}`
+            : `${config.apiUrl}/books`;
             
         const method = bookId ? 'PUT' : 'POST';
         
@@ -262,7 +262,7 @@ function logout() {
 async function loadOrders() {
     try {
         console.log('Loading orders...');
-        const response = await fetch('http://localhost:3000/orders');
+        const response = await fetch(`${config.apiUrl}/orders`);
         console.log('Orders response:', response);
         
         const data = await response.json();
@@ -385,7 +385,7 @@ function hideOrderModal() {
 // Update order status functions
 async function updateOrderStatus(orderId, newStatus) {
     try {
-        const response = await fetch(`http://localhost:3000/orders/${orderId}/status`, {
+        const response = await fetch(`${config.apiUrl}/orders/${orderId}/status`, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json'
@@ -475,7 +475,7 @@ function exportOrders() {
 // Users Management
 async function loadUsers() {
     try {
-        const response = await fetch('http://localhost:3000/users');
+        const response = await fetch(`${config.apiUrl}/users`);
         const data = await response.json();
         
         if (response.ok) {
@@ -582,7 +582,7 @@ async function deleteBook(bookId) {
     }
 
     try {
-        const response = await fetch(`http://localhost:3000/books/${bookId}`, {
+        const response = await fetch(`${config.apiUrl}/books/${bookId}`, {
             method: 'DELETE'
         });
 
@@ -706,8 +706,8 @@ async function handleUserSubmit(event) {
     
     try {
         const url = userId 
-            ? `http://localhost:3000/users/${userId}`
-            : 'http://localhost:3000/users';
+            ? `${config.apiUrl}/users/${userId}`
+            : `${config.apiUrl}/users`;
             
         const method = userId ? 'PUT' : 'POST';
 
@@ -741,7 +741,7 @@ async function deleteUser(userId) {
     }
 
     try {
-        const response = await fetch(`http://localhost:3000/users/${userId}`, {
+        const response = await fetch(`${config.apiUrl}/users/${userId}`, {
             method: 'DELETE'
         });
 

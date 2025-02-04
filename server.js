@@ -8,10 +8,20 @@ const path = require('path');
 const fs = require('fs');
 
 const app = express();
-app.use(cors()); // Enable CORS
+app.use(cors({
+    origin: process.env.NODE_ENV === 'production' 
+        ? 'https://book-store-app-2b777b744c19.herokuapp.com/' 
+        : 'http://localhost:3000',
+    credentials: true
+})); // Enable CORS
 app.use(bodyParser.json());
 
-const db = new sqlite3.Database('./database.sqlite'); // Use a file-based database
+// Update database configuration
+const dbPath = process.env.NODE_ENV === 'production' 
+    ? process.env.DATABASE_URL 
+    : './database.sqlite';
+
+const db = new sqlite3.Database(dbPath);
 
 // Create users table if it doesn't exist
 db.serialize(() => {
@@ -39,16 +49,17 @@ db.serialize(() => {
 // Configure multer for file upload with error handling
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
-        // Ensure uploads directory exists
-        const dir = './uploads';
+        const dir = process.env.NODE_ENV === 'production' 
+            ? '/tmp/uploads' 
+            : './uploads';
         if (!fs.existsSync(dir)){
-            fs.mkdirSync(dir);
+            fs.mkdirSync(dir, { recursive: true });
         }
-        cb(null, 'uploads/');
+        cb(null, dir);
     },
     filename: function (req, file, cb) {
         const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
-        cb(null, 'profile-' + uniqueSuffix + path.extname(file.originalname));
+        cb(null, file.fieldname + '-' + uniqueSuffix + path.extname(file.originalname));
     }
 });
 
@@ -94,8 +105,14 @@ const uploadBookImage = multer({
     }
 }).single('image');
 
-// Serve static files from uploads directory
+// Serve static files
+app.use(express.static('public'));
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+
+// Serve your HTML files
+app.get('/', (req, res) => {
+    res.sendFile(path.join(__dirname, 'HTML', 'AdminDashboard.html'));
+});
 
 // Registration endpoint
 app.post('/register', (req, res) => {
@@ -791,6 +808,17 @@ app.get('/orders', (req, res) => {
     });
 });
 
-app.listen(3000, () => {
-    console.log('Server running on port 3000');
+// Add this before your routes
+app.use((err, req, res, next) => {
+    console.error(err.stack);
+    res.status(500).json({
+        success: false,
+        message: 'Something broke!',
+        error: process.env.NODE_ENV === 'development' ? err.message : undefined
+    });
+});
+
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => {
+    console.log(`Server running on port ${PORT}`);
 }); 

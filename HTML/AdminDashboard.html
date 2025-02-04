@@ -344,6 +344,133 @@
                     </div>
                 </div>
             </section>
+
+            <!-- Reports Section -->
+            <section id="reportsSection" class="content-section">
+                <div class="section-header">
+                    <h1>Analytics & Reports</h1>
+                    <div class="header-actions">
+                        <div class="date-filter">
+                            <select id="reportPeriod" onchange="updateReports()">
+                                <option value="7">Last 7 Days</option>
+                                <option value="30">Last 30 Days</option>
+                                <option value="90">Last 3 Months</option>
+                                <option value="365">Last Year</option>
+                            </select>
+                        </div>
+                        <button class="btn btn-secondary" onclick="exportReports()">
+                            <i class="fas fa-download"></i> Export Reports
+                        </button>
+                    </div>
+                </div>
+
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-chart-line"></i>
+                        </div>
+                        <div class="stat-info">
+                            <h3>Total Sales</h3>
+                            <p id="totalSales">$0</p>
+                            <small class="trend up">+12.5% vs last period</small>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-shopping-cart"></i>
+                        </div>
+                        <div class="stat-info">
+                            <h3>Orders</h3>
+                            <p id="periodOrders">0</p>
+                            <small class="trend up">+5.2% vs last period</small>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-users"></i>
+                        </div>
+                        <div class="stat-info">
+                            <h3>New Customers</h3>
+                            <p id="newCustomers">0</p>
+                            <small class="trend up">+8.1% vs last period</small>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-book"></i>
+                        </div>
+                        <div class="stat-info">
+                            <h3>Books Sold</h3>
+                            <p id="booksSold">0</p>
+                            <small class="trend up">+15.3% vs last period</small>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="charts-grid">
+                    <div class="chart-card">
+                        <div class="card-header">
+                            <h2>Sales Overview</h2>
+                        </div>
+                        <div class="card-body">
+                            <canvas id="salesChart"></canvas>
+                        </div>
+                    </div>
+                    <div class="chart-card">
+                        <div class="card-header">
+                            <h2>Top Selling Books</h2>
+                        </div>
+                        <div class="card-body">
+                            <canvas id="topBooksChart"></canvas>
+                        </div>
+                    </div>
+                    <div class="chart-card">
+                        <div class="card-header">
+                            <h2>Orders by Status</h2>
+                        </div>
+                        <div class="card-body">
+                            <canvas id="orderStatusChart"></canvas>
+                        </div>
+                    </div>
+                    <div class="chart-card">
+                        <div class="card-header">
+                            <h2>Sales by Category</h2>
+                        </div>
+                        <div class="card-body">
+                            <canvas id="categorySalesChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="reports-grid">
+                    <div class="card">
+                        <div class="card-header">
+                            <h2>Best Selling Categories</h2>
+                        </div>
+                        <div class="card-body">
+                            <table class="data-table" id="categoryTable">
+                                <thead>
+                                    <tr>
+                                        <th>Category</th>
+                                        <th>Books Sold</th>
+                                        <th>Revenue</th>
+                                        <th>Growth</th>
+                                    </tr>
+                                </thead>
+                                <tbody></tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card-header">
+                            <h2>Customer Insights</h2>
+                        </div>
+                        <div class="card-body">
+                            <canvas id="customerInsightsChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </section>
         </main>
     </div>
 

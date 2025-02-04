@@ -1,22 +1,26 @@
 {
-  "name": "cursor-project",
+  "name": "bookstore-admin",
   "version": "1.0.0",
-  "main": "index.js",
+  "description": "Bookstore Admin Dashboard",
+  "main": "server.js",
+  "engines": {
+    "node": "16.x"
+  },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node server.js",
+    "dev": "nodemon server.js"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "description": "",
   "dependencies": {
+    "express": "^4.17.1",
+    "sqlite3": "^5.0.2",
     "bcryptjs": "^2.4.3",
-    "body-parser": "^1.20.3",
     "cors": "^2.8.5",
-    "express": "^4.21.2",
-    "fs": "^0.0.1-security",
-    "multer": "^1.4.5-lts.1",
-    "path": "^0.12.7",
-    "sqlite3": "^5.1.7"
+    "multer": "^1.4.3"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.15"
   }
 }
